@@ -7,26 +7,32 @@ client = Groq(api_key=GROQ_API_KEY)
 
 
 def generate_quiz(sport: str, difficulty: str):
-    
-    print("generate_quiz function started")
+
     print("Step 1: Getting historical facts...")
     historical_facts = query_historic_facts(sport)
 
-    print("Step 2: Searching recent news...")
+    print("Step 2: Searching recent sports news...")
 
     queries = {
-        "Cricket": "ICC Cricket latest news",
-        "Football": "FIFA Football latest news",
-        "Tennis": "ATP Tennis latest news",
-        "Basketball": "NBA Basketball latest news"
+        "Cricket": "site:icc-cricket.com latest cricket news",
+        "Football": "site:fifa.com latest football news",
+        "Tennis": "site:atptour.com latest tennis news",
+        "Basketball": "site:nba.com latest NBA news"
     }
 
     recent_news = search_recent_sports_news(
-        queries.get(sport, f"{sport} sports latest news")
+        queries.get(sport, f"{sport} latest sports news")
     )
 
-    print(recent_news)
-    raise Exception(recent_news)
+    # If no news found, use default news
+    if not recent_news:
+        recent_news = [
+            {
+                "title": f"Latest {sport} Updates",
+                "body": f"No live news found. Using general {sport} knowledge.",
+                "link": ""
+            }
+        ]
 
     history_context = "\n".join(historical_facts)
 
