@@ -26,6 +26,7 @@ def generate_quiz(sport: str, difficulty: str):
     )
 
     print(recent_news)
+    raise Exception(recent_news)
 
     history_context = "\n".join(historical_facts)
 
